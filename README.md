@@ -29,22 +29,31 @@ Note that this will produce a binary .so compiled with `platform=unix-armv7-hard
 
 ### Building individual cores (or anything else)
 There are two sets of environment variables set up in the image. The default is the toolchain installed from Ubuntu:
-- `CC=/usr/bin/arm-linux-gnueabihf-gcc`
-- `AR=/usr/bin/arm-linux-gnueabihf-gcc-ar`
-- `CXX=/usr/bin/arm-linux-gnueabihf-g++`
-- `PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig/`  
-
+```
+CC=/usr/bin/arm-linux-gnueabihf-gcc
+AR=/usr/bin/arm-linux-gnueabihf-gcc-ar
+CXX=/usr/bin/arm-linux-gnueabihf-g++
+PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig/
+```
 The other one is the toolchain built by crosstools-ng, extended with libs of the default toolchain:
-- `CXX17="/opt/x-tools/arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++ -idirafter /usr/include -L/usr/lib/arm-linux-gnueabihf/"`
-- `CC17="/opt/x-tools/arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc -idirafter /usr/include -L/usr/lib/arm-linux-gnueabihf/"`
-- `AR17=/opt/x-tools/arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc-ar`  
-
+```
+CXX17="/opt/x-tools/arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++ -idirafter /usr/include -L/usr/lib/arm-linux-gnueabihf/"
+CC17="/opt/x-tools/arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc -idirafter /usr/include -L/usr/lib/arm-linux-gnueabihf/"
+AR17=/opt/x-tools/arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc-ar
+```
 It is highly dependent on the build system, whether cross compilation will be possible, and if so, what platform / arch / target values need to be used. Libretro cores usually honor values of CC/CXX, so to use the newer compiler, try `CC=$(CC17) CXX=$(CXX17) make platform=unix-armv7`. But there is no guarantee that build system will recognize this target correctly, you need to read the makefile.
 
 ## More details
 The reason why the build is based on such an old Ubuntu release is to avoid any library dependency problem when using the compiled images. The libretro base image can probably be substituted with a clean build from xenial as well, but it speeds up the build process.
 
-The image has the Linaro gcc5 by default, and gcc9.4 compiled as extra. Hardfloat setting is coming from compiler (both compilers). Architecture armv7 is in gcc5 default. The gcc9 setup tries to mimic the environment used for gcc5, to avoid any compatibility problems. Usage of neon is not hardcoded anywhere, except for the target name in libretro-super.
+The image has the Linaro gcc5 by default, and gcc9.4 compiled as extra. Default architecture for the compilers:
+```
+root@c17ce0b175c6:~# echo | $CC -v -E - 2>&1 | grep cc1
+ /usr/lib/gcc-cross/arm-linux-gnueabihf/5/cc1 -E -quiet -v -imultiarch arm-linux-gnueabihf - -march=armv7-a -mfloat-abi=hard -mfpu=vfpv3-d16 -mthumb -mtls-dialect=gnu -fstack-protector-strong -Wformat -Wformat-security
+root@c17ce0b175c6:~# echo | $CC17 -v -E - 2>&1 | grep cc1
+ /opt/x-tools/arm-linux-gnueabihf/libexec/gcc/arm-linux-gnueabihf/9.4.0/cc1 -E -quiet -v -idirafter /usr/include - -mcpu=arm10e -mfloat-abi=hard -mtls-dialect=gnu -marm -march=armv5te+fp
+```
+The gcc9 setup tries to mimic the environment used for gcc5, to avoid any compatibility problems. However, it contains less fixed elements, in particular architecture can go lower than the armv7-a default of gcc5. Usage of neon is not hardcoded anywhere, except for the target name in libretro-super (which, in turn, may cause the makefile to enable it).
 
 ## Caveats
 - `gcc` is present, but it produces x86_64 code, if this happens, makefile has redefined CC/CXX. Use `readelf -h` on the produced binary to check.
