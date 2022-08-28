@@ -3,7 +3,8 @@
 Container image configurations to enable cross-compilation of retroarch and libretro cores, where host is a generic x86-64 machine, and target is something else. Currently, armhf target is available.
 
 # armhf
-Image that can compile Retroarch and libretro cores for ARM hardfloat platforms. Tested with armv7.
+Image that can compile Retroarch and libretro cores for ARM hardfloat platforms. Tested with armv7. A snapshot of compiled cores can be found at:
+https://zoltanvb.github.io/armv7-hf-neon/
 
 ## Building the image
 `cd armhf  
