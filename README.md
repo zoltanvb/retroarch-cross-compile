@@ -7,8 +7,8 @@ Image that can compile Retroarch and libretro cores for ARM hardfloat platforms.
 https://zoltanvb.github.io/armv7-hf-neon/
 
 ## Building the image
-`cd armhf  
-docker build .`  
+`cd armhf`  
+`docker build .`  
 Note that build process will take a while (up to one hour), as it will include building a complete toolchain with crosstools-ng.
 
 ## Using the image to build retroarch / cores
@@ -58,8 +58,8 @@ The gcc9 setup tries to mimic the environment used for gcc5, to avoid any compat
 
 ## Caveats
 - `gcc` is present, but it produces x86_64 code, if this happens, makefile has redefined CC/CXX. Use `readelf -h` on the produced binary to check.
-hardfloat is coming from compiler (both compilers)
+- hardfloat is coming from compiler (both compilers)
 - compiling for armv6 is theoretically supported but needs to be tested (see https://stackoverflow.com/questions/35132319/build-for-armv6-with-gnueabihf/51201725#51201725)
 - `cmake` is present but wasn't tested in detail
-- image does not contain any particular HW library like `libbrcmEGL` for Raspberry Pi. so it will not be able to link against that. This means a severe performance hit for any core that uses OpenGL (or Retroarch itself).
+- image does not contain any particular HW library like `libbrcmEGL` for Raspberry Pi. so it will not be able to link against that. This may mean a severe performance hit for any core that uses OpenGL (or Retroarch itself), depending on OS. See https://forums.raspberrypi.com/viewtopic.php?t=317511 for some RPi specifics.
 - image is for Unix/Linux target. Does not contain any Android or iOS tools.
