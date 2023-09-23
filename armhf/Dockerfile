@@ -31,6 +31,7 @@ RUN echo 'CT_CONFIG_VERSION="4"' >> /tmp/defconfig && \
     echo 'CT_CC_LANG_CXX=y' >> /tmp/defconfig && \
     echo 'CT_CC_GCC_LIBGOMP=y' >> /tmp/defconfig
 RUN cd /tmp && /opt/ctng/bin/ct-ng defconfig
+RUN echo 'CT_ZLIB_MIRRORS="http://downloads.sourceforge.net/project/libpng/zlib/${CT_ZLIB_VERSION} https://www.zlib.net/ https://www.zlib.net/fossils"' >> /tmp/.config
 RUN cd /tmp && /opt/ctng/bin/ct-ng build
 
 
