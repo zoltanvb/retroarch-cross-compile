@@ -11,6 +11,8 @@ https://zoltanvb.github.io/armv7-hf-neon/
 `docker build .`  
 Note that build process will take a while (up to one hour), as it will include building a complete toolchain with crosstools-ng.
 
+Update for 2023-09: some packages have disappeared from xenial repositories, so libmpv and libsdl2 is now excluded from building.
+
 ## Using the image to build retroarch / cores
 Clone the repository to build (RetroArch, individual core, or even libretro-super), then:  
 `sudo docker run --rm -it -v "<cloned dir>:/build" <image name>`  
