@@ -53,7 +53,7 @@ ENV PACKAGES \
     crossbuild-essential-armhf
 
 RUN set -eux; \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C6BF758A33A3A276 6AF7F09730B3F0A4; \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C6BF758A33A3A276 6AF7F09730B3F0A4 42D5A192B819C5DA; \
     apt-get update; \
     apt-get -y install $PACKAGES; \
     chown -R developer:developer /developer
@@ -100,12 +100,10 @@ ENV ARM_PACKAGES \
     zlib1g-dev:armhf \
     libfontconfig1:armhf \
     alsa-utils:armhf \
-    libmpv-dev:armhf \
     libroar-dev:armhf \
     libssl-dev:armhf \
     libjack-jackd2-dev:armhf \
     libopenal-dev:armhf \
-    libsdl2-dev:armhf \
     qtbase5-dev:armhf \
     libavutil-dev:armhf \
     libass-dev:armhf \
@@ -116,12 +114,9 @@ ENV ARM_PACKAGES \
 RUN set -eux; \
     dpkg --add-architecture armhf; \
     rm -rf /etc/apt/sources.list; \
-    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial main restricted" | tee -a /etc/apt/sources.list && \
-    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted" | tee -a /etc/apt/sources.list && \
-    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial universe" | tee -a /etc/apt/sources.list && \
-    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial-updates universe" | tee -a /etc/apt/sources.list && \
-    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial multiverse" | tee -a /etc/apt/sources.list && \
-    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial-updates multiverse" | tee -a /etc/apt/sources.list && \
+    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse" | tee -a /etc/apt/sources.list && \
+    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse" | tee -a /etc/apt/sources.list && \
+    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial-security main restricted universe multiverse"  | tee -a /etc/apt/sources.list && \
     echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse"  | tee -a /etc/apt/sources.list && \
     apt-get update; \
     apt-get install -y $ARM_PACKAGES; \
